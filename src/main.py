@@ -6,14 +6,12 @@ import matplotlib.dates as mdates
 import pandas as pd
 import pandas_datareader.data as web
 
-from src.setup import scrape_sp500_tickers
-
 style.use('ggplot')
-start = dt.datetime(2000, 2, 18) #my birthday!
+start = dt.datetime(2019, 2, 18) #my birthday!
 end = dt.datetime.now()
 
-
 df = web.DataReader('TSLA', 'yahoo', start, end) # this is dataframe!
+
 '''
 print("IPO:")
 print(df.head())
@@ -21,7 +19,8 @@ print("RECENT:")
 print(df.tail())
 '''
 
-scrape_sp500_tickers()
+#scrape_sp500_tickers()
+#get_data_from_yahoo()
 
 
 
