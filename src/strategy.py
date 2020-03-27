@@ -5,6 +5,7 @@ import mplfinance as mpf
 import matplotlib.dates as mdates
 import pandas as pd
 import backtrader as bt
+import backtrader.indicators as btind
 
 
 class TestStrategy(bt.Strategy):
@@ -82,6 +83,27 @@ class TestStrategy1(bt.Strategy):
                 self.log('SELL ORDER CREATED {}'.format(self.dataclose[0]))
                 # buy and sell orders are created at end of day, so trades aren't actualized until next day market open
                 self.order = self.sell()
+
+
+class MAVGStrategy(bt.Strategy):
+
+    def log(self, txt, dt=None):
+        dt = dt or self.datas[0].datetime.date(0)
+        print('%s, %s' % (dt.isoformat(), txt))
+
+    def __init__(self):
+        self.sma = btind.MovingAverageSimple(period=8)
+
+    def next(self):
+        if self.sma > self.data.close:
+            self.log('BUY CREATE, %.2f' % self.data.close[0])
+            print(self.sma[0] - self.data.close[0])  # Prints the difference in SMA and current price
+            self.buy()
+
+        elif self.sma < self.data.close:
+            self.log('SELL ORDER CREATED {}'.format(self.data.close[0]))
+            # buy and sell orders are created at end of day, so trades aren't actualized until next day market open
+            self.sell()
 
 
 def trading_signals(position):

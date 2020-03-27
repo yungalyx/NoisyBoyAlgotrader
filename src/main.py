@@ -8,7 +8,7 @@ import pandas_datareader.data as web
 import numpy as np
 import backtrader as bt
 
-from src.strategy import sma_plot, TestStrategy, TestStrategy1
+from src.strategy import sma_plot, TestStrategy, TestStrategy1, MAVGStrategy
 
 # 1.creating pandas dataframe object from web reader
 style.use('ggplot')
@@ -26,7 +26,7 @@ df1.to_csv("tsla.csv") # [EDIT]
 cerebro = bt.Cerebro()
 data = bt.feeds.YahooFinanceCSVData(dataname='tsla.csv') # [EDIT]
 cerebro.adddata(data)
-cerebro.addstrategy(TestStrategy1)
+cerebro.addstrategy(MAVGStrategy) # [EDIT]
 cerebro.addsizer(bt.sizers.FixedSize, stake=100)
 
 # 4.
