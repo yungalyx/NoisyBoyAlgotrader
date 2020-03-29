@@ -33,7 +33,7 @@ class TestStrategy(bt.Strategy):
                 self.log('BUY CREATE, %.2f' % self.dataclose[0])
                 self.buy()
 
-
+# buys a 2 day dip, holds 5 days and sell.
 class TestStrategy1(bt.Strategy):
 
     def log(self, txt, dt=None):
@@ -84,7 +84,7 @@ class TestStrategy1(bt.Strategy):
                 # buy and sell orders are created at end of day, so trades aren't actualized until next day market open
                 self.order = self.sell()
 
-
+# buys if below mavg, sells if above
 class MAVGStrategy(bt.Strategy):
 
     def log(self, txt, dt=None):
@@ -104,6 +104,8 @@ class MAVGStrategy(bt.Strategy):
             self.log('SELL ORDER CREATED {}'.format(self.data.close[0]))
             # buy and sell orders are created at end of day, so trades aren't actualized until next day market open
             self.sell()
+
+
 
 
 def trading_signals(position):
