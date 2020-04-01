@@ -37,3 +37,5 @@ class GoldenCrossStrategy(bt.Strategy):
 
 
 
+
+
