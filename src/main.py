@@ -12,21 +12,29 @@ from src.strategies.intermediate import AllocationStrategy
 style.use('ggplot')
 start = dt.datetime(2017, 1, 1)
 end = dt.datetime.now()
-df = web.DataReader('GOOGL', 'yahoo', start, end) # [EDIT]
 
+ticker_list = ['GOOGL', 'DAL', 'TSLA', 'WM', 'PG']
 
-# 2.reordering dataframe columns, and converting it into CSV for backtrader cerebro
 cols = ['Open', 'High', 'Low', 'Close', 'Adj Close', 'Volume']
-df1 = df.reindex(columns=cols)
-print(df1)
-df1.to_csv("nflx.csv") # [EDIT]
 
-
-# 3.attaching csv and strategy to backtrader cerebro
+# init cerebro
 cerebro = bt.Cerebro()
-data = bt.feeds.YahooFinanceCSVData(dataname='nflx.csv') # [EDIT]
-cerebro.adddata(data)
-cerebro.addstrategy(AllocationStrategy) # [EDIT]
+
+# converting ticker to web data to csv and inserting into cerebro
+for i in ticker_list:
+    print(i)
+    df = web.DataReader(i, 'yahoo', start, end)
+    df = df.reindex(columns=cols)
+    df.to_csv('%s.csv' % i)  # might need to two line this
+    data = bt.feeds.YahooFinanceCSVData(dataname='%s.csv' % i)  # along w this
+    cerebro.adddata(data, name=i)
+
+
+df3= web.DataReader('PG', 'yahoo', start, end)
+df3 = df3.reindex(columns=['High', 'Close', 'Adj Close'])
+print(df3.tail(5))
+
+cerebro.addstrategy(AllocationStrategy)  # [EDIT]
 cerebro.addsizer(bt.sizers.FixedSize, stake=100)
 
 # 4.
@@ -35,5 +43,7 @@ print('Starting Portfolio Value: %.2f' % cerebro.broker.getvalue())
 cerebro.run()
 print('Final Portfolio Value: %.2f' % cerebro.broker.getvalue())
 cerebro.plot()
+
+
 
 # sma_plot(df, 50, 200)
