@@ -1,9 +1,3 @@
-import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib import style
-import mplfinance as mpf
-import matplotlib.dates as mdates
-import pandas as pd
 import backtrader as bt
 import backtrader.indicators as btind
 import math

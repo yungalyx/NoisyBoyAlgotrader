@@ -15,7 +15,7 @@ start = dt.datetime(2017, 1, 1)
 # end = dt.datetime(2020, 1, 1)
 end = dt.datetime.now()
 
-ticker_list = ['PG', 'JCP', 'TSLA', 'RACE'] # Nflx, zm, wm, lulu, LMT,
+ticker_list = ['AAPL']
 
 cols = ['Open', 'High', 'Low', 'Close', 'Adj Close', 'Volume']
 
@@ -32,7 +32,7 @@ for i in ticker_list:
     cerebro.adddata(data, name=i)
 
 
-df3= web.DataReader('PG', 'yahoo', start, end)
+df3 = web.DataReader('PG', 'yahoo', start, end)
 df3 = df3.reindex(columns=['High', 'Close', 'Adj Close'])
 print(df3.tail(5))
 

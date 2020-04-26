@@ -6,6 +6,9 @@ import os
 import pandas as pd
 import pandas_datareader.data as web
 
+SECRET_KEY = 'MT6ZPUdqChaXPF/fdz/P7zCUihYDNlnvSbhF8ZeZ'
+API_KEY = 'PKAEF0MF359GKY0XS5SK'
+ENDPOINT_URL = 'https://paper-api.alpaca.markets'
 
 def scrape_sp500_tickers():
     resp = requests.get('https://en.wikipedia.org/wiki/List_of_S%26P_500_companies')
