@@ -17,7 +17,7 @@ Technicals:
 + pyalgotrade library 
 + backtrader library
 
-![Image of stonks](/images/stonks.png)
+![Image of stonks](/stonks.png)
 
 ### Live/Paper trading:
 1. The difficult step here is to find a way to stream data if you want to do intraday trading (which was the original purpose of this bot).
