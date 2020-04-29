@@ -15,7 +15,7 @@ start = dt.datetime(2017, 1, 1)
 # end = dt.datetime(2020, 1, 1)
 end = dt.datetime.now()
 
-ticker_list = ['AAPL']
+ticker_list = ['AAPL', 'RACE', 'GOOGL']
 
 cols = ['Open', 'High', 'Low', 'Close', 'Adj Close', 'Volume']
 

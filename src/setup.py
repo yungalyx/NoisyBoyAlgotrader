@@ -10,6 +10,14 @@ SECRET_KEY = 'MT6ZPUdqChaXPF/fdz/P7zCUihYDNlnvSbhF8ZeZ'
 API_KEY = 'PKAEF0MF359GKY0XS5SK'
 ENDPOINT_URL = 'https://paper-api.alpaca.markets'
 
+TIINGO_KEY = '3b766e3ad439feb379b9b2cdd0e677761ae72842'
+
+response = {'service': 'iex',
+            'messageType': 'A',
+            'data': ['T', '2020-04-29T10:35:15.491012812-04:00', 1588170915491012812, 'spy',
+                     None, None, None, None, None, 292.27, 100, None, 0, 0, 0, 0]}
+
+
 def scrape_sp500_tickers():
     resp = requests.get('https://en.wikipedia.org/wiki/List_of_S%26P_500_companies')
     soup = bs.BeautifulSoup(resp.text, "lxml")
@@ -26,7 +34,6 @@ def scrape_sp500_tickers():
     return tickers
 
 
-
 def get_data_from_yahoo(reload_sp500=False):
     if reload_sp500:
         tickers = scrape_sp500_tickers()
@@ -41,8 +48,8 @@ def get_data_from_yahoo(reload_sp500=False):
     end = dt.datetime.now()
 
     for ticker in tickers[:50]:
-         if not os.path.exists('stock_dfs/{}.csv'.format(ticker)):
-             df = web.DataReader(ticker, 'yahoo', start, end)
-             df.to_csv('stock_dfs/{}.csv'.format(ticker))
-         else:
-             print("Already have {}".format(ticker))
+        if not os.path.exists('stock_dfs/{}.csv'.format(ticker)):
+            df = web.DataReader(ticker, 'yahoo', start, end)
+            df.to_csv('stock_dfs/{}.csv'.format(ticker))
+        else:
+            print("Already have {}".format(ticker))
