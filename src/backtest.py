@@ -46,6 +46,4 @@ strats = cerebro.run()
 print('Final Portfolio Value: %.2f' % cerebro.broker.getvalue())
 cerebro.plot()
 
-
-
 # sma_plot(df, 50, 200)
