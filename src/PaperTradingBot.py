@@ -41,6 +41,7 @@ class PaperTradingBot:
                 'tickers': ['spy']
             }
         }
+        
         ws.send(json.dumps(auth_data))
 
     # do not listen to the IDE... this method is NOT static
