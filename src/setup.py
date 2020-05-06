@@ -1,22 +1,12 @@
-import bs4 as bs
-import pickle
-import requests
 import datetime as dt
-import os
 import pandas as pd
 import pandas_datareader.data as web
-import plotly.graph_objects as go
 import dash
-
 
 SECRET_KEY = 'MT6ZPUdqChaXPF/fdz/P7zCUihYDNlnvSbhF8ZeZ'
 API_KEY = 'PKAEF0MF359GKY0XS5SK'
 ENDPOINT_URL = 'https://paper-api.alpaca.markets'
-
 TIINGO_KEY = '3b766e3ad439feb379b9b2cdd0e677761ae72842'
-# authenticate message for TIINGO
-
-
 
 response = {'service': 'iex',
             'messageType': 'A',
@@ -28,17 +18,18 @@ df = df.append({'Date': '05/02/2020 1:27', 'open': 500, 'high': 501, 'low': 499,
 df = df.append({'Date': '05/02/2020 1:28', 'open': 299, 'high': 303, 'low': 296, 'close': 303}, ignore_index=True)
 df = df.append({'Date': '05/02/2020 1:29', 'open': 103, 'high': 106, 'low': 102, 'close': 107}, ignore_index=True)
 
+print(df)
 
-fig = go.Figure(data=go.Ohlc(x=df['Date'],
+
+print(len(df))
+print(len(df) - 1)
+
+'''fig = go.Figure(data=go.Ohlc(x=df['Date'],
                              open=df['open'],
                              high=df['high'],
                              low=df['low'],
                              close=df['close']))
-fig.show()
-print(df.at[len(df)-1, 'close'])
+fig.show()'''
+print(df.at[len(df) - 1, 'close'])
 
-
-df.at[len(df)-1, 'close'] = 500
-
-print(df)
-
+df.at[len(df) - 1, 'close'] = 500

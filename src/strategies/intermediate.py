@@ -15,7 +15,6 @@ class AllocationStrategy(bt.Strategy):
         for i, d in enumerate(self.datas):
             self.inds[d] = btind.BollingerBands(d, period=self.params.BBandsPeriod)
 
-
     def market_uptrending(self, d):
         if self.inds[d].lines.mid[-10] < self.inds[d].lines.mid[-5]:
             return True
@@ -32,7 +31,7 @@ class AllocationStrategy(bt.Strategy):
 
             # if the market is uptrending, we can buy dips
             if self.market_uptrending(d):
-            # if close was below botlinger today and yesterday, enter trade
+                # if close was below botlinger today and yesterday, enter trade
                 if self.datas[i].close[0] < self.inds[d].lines.bot[0]:
                     if self.datas[i].close[-1] < self.inds[d].lines.bot[-1]:
                         self.size = math.floor(invest_amt / self.datas[i].close)
@@ -43,6 +42,3 @@ class AllocationStrategy(bt.Strategy):
                     if self.datas[i].close[-1] > self.inds[d].lines.top[-1]:
                         print("CLOSE: {} shares of {} at {}".format(self.position.size, dn, self.datas[i].close[0]))
                         self.close(data=d)
-
-            
-
