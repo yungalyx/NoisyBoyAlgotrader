@@ -31,18 +31,6 @@ def on_open(ws):
     }
     ws.send(json.dumps(auth_data))
 
-
-def plotter():
-
-    fig = go.Figure(data=go.Ohlc(x=minute_candlesticks['minute'],
-                                 open=minute_candlesticks['open'],
-                                 high=minute_candlesticks['high'],
-                                 low=minute_candlesticks['low'],
-                                 close=minute_candlesticks['close']))
-
-    fig.show()
-
-
     # app.run_server(debug=True) // signals are only sent in main thread so thats kinda fucked...
     '''
          @app.callback(Output('live-graph', 'figure'),
@@ -96,10 +84,24 @@ def on_message(ws, message):
         print(current_tick)
 
 
-socket = 'wss://api.tiingo.com/iex'
+def grabdata():
+    socket = 'wss://api.tiingo.com/iex'
+    ws = websocket.WebSocketApp(socket, on_open=on_open, on_message=on_message)
+    ws.run_forever()
 
-thread = threading.Thread(target=plotter)
+
+thread = threading.Thread(target=grabdata)
 thread.start()
-ws = websocket.WebSocketApp(socket, on_open=on_open, on_message=on_message)
 
-ws.run_forever()
+app = dash.Dash()
+
+fig = go.Figure(data=go.Ohlc(x=minute_candlesticks['minute'],
+                             open=minute_candlesticks['open'],
+                             high=minute_candlesticks['high'],
+                             low=minute_candlesticks['low'],
+                             close=minute_candlesticks['close']))
+app.layout = html.Div([
+    dcc.Graph(figure=fig)
+])
+
+app.run_server(debug=False)
