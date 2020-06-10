@@ -1,29 +1,26 @@
-import requests, json, websocket
-import alpaca_trade_api as tradeapi
+import json, threading
+import websocket
 import dateutil.parser
-import plotly.graph_objects as go
+import pandas as pd
 import dash
+from dash.dependencies import Input, Output
 import dash_core_components as dcc
 import dash_html_components as html
+import plotly.graph_objs as go
 
-import pandas as pd
 from src.setup import TIINGO_KEY
 
-TICKER = ['AAPL', 'RACE', 'TSLA']
+socket = 'wss://api.tiingo.com/iex'
 
-# for processing intraday data stream
-minutes_processed = {}  # dictionary
-minute_candlesticks = pd.DataFrame(columns=['minute', 'open', 'high', 'low', 'close'])
 current_tick = None  # tracking current tick
 previous_tick = None
+
+minute_candlesticks = pd.DataFrame(columns=['minute', 'open', 'high', 'low', 'close'])
+minutes_processed = {}
 
 
 def on_open(ws):
     print('=== Opened Connection ===')
-    # set up graphing
-    # set_up_graph()
-
-    # authenticate
     auth_data = {
         'eventName': 'subscribe',
         'authorization': TIINGO_KEY,
@@ -34,7 +31,29 @@ def on_open(ws):
     }
     ws.send(json.dumps(auth_data))
 
-    # do not listen to the IDE... this method is NOT static
+
+def plotter():
+
+    fig = go.Figure(data=go.Ohlc(x=minute_candlesticks['minute'],
+                                 open=minute_candlesticks['open'],
+                                 high=minute_candlesticks['high'],
+                                 low=minute_candlesticks['low'],
+                                 close=minute_candlesticks['close']))
+
+    fig.show()
+
+
+    # app.run_server(debug=True) // signals are only sent in main thread so thats kinda fucked...
+    '''
+         @app.callback(Output('live-graph', 'figure'),
+                      Input('graph-update', 'interval'))
+        def update_graph():
+            return {
+                'data': fig,
+                'layout': go.Layout(xaxis=range(0, len(minute_candlesticks)))  # might need to update yaxis as well
+            }
+    '''
+
 
 def on_message(ws, message):
     global current_tick, previous_tick, minute_candlesticks
@@ -78,5 +97,9 @@ def on_message(ws, message):
 
 
 socket = 'wss://api.tiingo.com/iex'
+
+thread = threading.Thread(target=plotter)
+thread.start()
 ws = websocket.WebSocketApp(socket, on_open=on_open, on_message=on_message)
+
 ws.run_forever()
