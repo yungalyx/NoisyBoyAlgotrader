@@ -31,17 +31,6 @@ def on_open(ws):
     }
     ws.send(json.dumps(auth_data))
 
-    # app.run_server(debug=True) // signals are only sent in main thread so thats kinda fucked...
-    '''
-         @app.callback(Output('live-graph', 'figure'),
-                      Input('graph-update', 'interval'))
-        def update_graph():
-            return {
-                'data': fig,
-                'layout': go.Layout(xaxis=range(0, len(minute_candlesticks)))  # might need to update yaxis as well
-            }
-    '''
-
 
 def on_message(ws, message):
     global current_tick, previous_tick, minute_candlesticks
@@ -100,8 +89,25 @@ fig = go.Figure(data=go.Ohlc(x=minute_candlesticks['minute'],
                              high=minute_candlesticks['high'],
                              low=minute_candlesticks['low'],
                              close=minute_candlesticks['close']))
+
 app.layout = html.Div([
-    dcc.Graph(figure=fig)
+    dcc.Graph(id='live-graph', figure=fig, animate=True),  # need id to update objects in js
+    dcc.Interval(
+        id='graph-update',
+        interval=2*1000,
+        n_intervals=0
+    )
 ])
+
+
+@app.callback(Output('live-graph', 'figure'),
+              [Input('graph-update', 'interval')])
+def update_graph():
+    figure = {
+        'data': [fig],
+        'layout': go.Layout(xaxis=range(0, len(minute_candlesticks)))  # might need to update yaxis as well
+    }
+    return figure
+
 
 app.run_server(debug=False)
